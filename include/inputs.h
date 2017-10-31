@@ -17,15 +17,14 @@ using namespace std;
 class Inputs
 {
     private:
-       canHandle hnd; 
+       canHandle *hndPtr; 
        canStatus stat;
        int bitRate;
        int numChannel;
-       int *idChannel;
+       int *idChannelPtr;
 
     public:
-        Inputs(int numChannel_, int *idChannel_, int bitRate_);
+        Inputs(int numChannel_, int *idChannelPtr_, int bitRate_);
         void kvaserInit();
-       // ~Inputs();
-
+        ~Inputs();
 };

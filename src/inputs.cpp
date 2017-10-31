@@ -7,11 +7,25 @@
 
 #include "inputs.h"
 
-Inputs::Inputs(int numChannel_, int *idChannel_, int bitRate_)
+Inputs::Inputs(int numChannel_, int *idChannelPtr_, int bitRate_)
 {
     numChannel = numChannel_;
-    idChannel = idChannel_;
+    idChannelPtr = idChannelPtr_;
     bitRate = bitRate_; 
+    idChannelPtr = new int[numChannel];
+    hndPtr = new canHandle[numChannel];   
+}
+
+Inputs::~Inputs()
+{
+    for(int i=0;i<numChannel;i++)
+    {
+        canClose(hndPtr[i]);
+        cout<<"Can Channel "<< i <<" is already closed!"<<endl;
+    }
+
+    delete [] idChannelPtr;
+    delete [] hndPtr;
 }
 
 void Inputs::kvaserInit()
@@ -20,34 +34,34 @@ void Inputs::kvaserInit()
 
     for(int i=0;i<numChannel;i++)
     {
-        hnd = canOpenChannel(idChannel[i],canOPEN_ACCEPT_VIRTUAL);
-        if(hnd<0)
+        hndPtr[i] = canOpenChannel(idChannelPtr[i],canOPEN_ACCEPT_VIRTUAL);
+        if(hndPtr[i]<0)
         {
-            cout<<"Can Channel "<< idChannel[i] <<" Open not successful!"<<endl;
+            cout<<"Can Channel "<< idChannelPtr[i] <<" Open not successful!"<<endl;
         }
         else
         {    
-            cout<<"Can Channel "<< idChannel[i] <<" Open successful!"<<endl;
+            cout<<"Can Channel "<< idChannelPtr[i] <<" Open successful!"<<endl;
         }
 
-        stat = canSetBusParams(hnd,bitRate,0,0,0,0,0);
+        stat = canSetBusParams(hndPtr[i],bitRate,0,0,0,0,0);
         if(stat!=canOK)
         {
-            cout<<"Can Channel "<< idChannel[i] <<" Set Bus Params not successful!"<<endl; 
+            cout<<"Can Channel "<< idChannelPtr[i] <<" Set Bus Params not successful!"<<endl; 
         }
         else
         {    
-            cout<<"Can Channel "<< idChannel[i] <<" Set Bus Params successful!"<<endl; 
+            cout<<"Can Channel "<< idChannelPtr[i] <<" Set Bus Params successful!"<<endl; 
         }
         
-        stat = canBusOn(hnd);
+        stat = canBusOn(hndPtr[i]);
         if(stat!=canOK)
         {
-            cout<<"Can Channel "<< idChannel[i] <<" Bus On not successful!"<<endl;
+            cout<<"Can Channel "<< idChannelPtr[i] <<" Bus On not successful!"<<endl;
         }
         else
         {  
-            cout<<"Can Channel "<< idChannel[i] <<" Bus On successful!"<<endl;
+            cout<<"Can Channel "<< idChannelPtr[i] <<" Bus On successful!"<<endl;
         }
     }
 }

@@ -9,6 +9,8 @@
 #include"kvrChannel.h"
 #include<unistd.h>
 #include<pthread.h>
+#include"dbcparser.h"
+#include"dev_kvaser.h"
 
 using namespace std;
 
@@ -29,7 +31,7 @@ int main()
     KvrChannel kvrChl1(0,bitRate);
     KvrChannel kvrChl2(1,bitRate);
 
-    pthread_t pth1;
+    pthread_t pth1,pth;
     int ret = 0;
 
     ret = pthread_create(&pth1, NULL, SendAndReceive, (void *)&kvrChl1);
@@ -42,7 +44,22 @@ int main()
         cout<<"Create pthread successful!"<<endl;
     }
 
+
+    if(StartCanRxMsgTask(pth,1))
+    {
+        cout<<"Can Thread 2 failed!"<<endl;
+    }
+    else
+    {
+        cout<<"Can Thread 2 successful!"<<endl;
+    }
+
     if(pthread_join(pth1,NULL))
+    {
+        cout<<"Could not join pth1"<<endl;
+    }
+
+    if(pthread_join(pth,NULL))
     {
         cout<<"Could not join pth1"<<endl;
     }

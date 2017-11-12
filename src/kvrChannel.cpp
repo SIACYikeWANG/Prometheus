@@ -5,7 +5,7 @@
 	> Created Time: 2017年11月07日 星期二 08时18分33秒
  ************************************************************************/
 
-#include<kvrChannel.h>
+#include"kvrChannel.h"
 
 
 //Default: Channel ID = 0, Bit rate = 500K

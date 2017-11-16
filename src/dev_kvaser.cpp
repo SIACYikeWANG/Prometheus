@@ -154,7 +154,7 @@ int StartCanRxMsgTask(pthread_t pth,int kvaserChannelNo)
 int StartCanTxMsgTask(pthread_t pth,int kvaserChannelNo)
 {
     int result = 0;
-    pthread_t pth;
+    //pthread_t pth;
     if (kvaserChannelNo < 0 || kvaserChannelNo > 3)
     {
         result = 1;

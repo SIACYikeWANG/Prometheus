@@ -11,93 +11,43 @@
 #include<pthread.h>
 #include"dbcparser.h"
 #include"dev_kvaser.h"
+#include"body_dbc_conf.h"
 
 using namespace std;
-
-void* SendAndReceive(void *arg);
-void checkCanWrite(canStatus stat_);
 
 int main()
 {
     //Initialize kvaser library!
     canInitializeLibrary();
 
+    int bitRate = canBITRATE_500K;
 
+    KvrChannel kvrChl0(0,bitRate);
+//    KvrChannel kvrChl1(1,bitRate);
 
-    cout<<"Hello World!"<<endl;
-    //int idChl =0;
-    int bitRate = 500000;
+    pthread_t pth0,pth1;
+//    pthread_t pth2,pth3;
 
-    KvrChannel kvrChl1(0,bitRate);
-    KvrChannel kvrChl2(1,bitRate);
+    EPS_StsReq_112_CAN1 = 1;
+    EPS_SteeringAngleReq_112_CAN1 = 100;
 
-    pthread_t pth1,pth;
-    int ret = 0;
+    StartCanTxMsgTask(&pth0,&kvrChl0);
+//    StartCanRxMsgTask(&pth1,&kvrChl0);
 
-    ret = pthread_create(&pth1, NULL, SendAndReceive, (void *)&kvrChl1);
-    if(ret)
+//    StartCanTxMsgTask(&pth2,&kvrChl1);
+//    StartCanRxMsgTask(&pth3,&kvrChl1);
+
+    if(pthread_join(pth0,NULL))
     {
-        cout<<"Create pthread Failed!"<<endl;
-    }
-    else
-    {
-        cout<<"Create pthread successful!"<<endl;
-    }
-
-
-    if(StartCanRxMsgTask(pth,1))
-    {
-        cout<<"Can Thread 2 failed!"<<endl;
-    }
-    else
-    {
-        cout<<"Can Thread 2 successful!"<<endl;
+        cout<<"Could not join pth"<<endl;
     }
 
-    if(pthread_join(pth1,NULL))
-    {
-        cout<<"Could not join pth1"<<endl;
-    }
+//    if(pthread_join(pth1,NULL))
+//    {
+//        cout<<"Could not join pth1"<<endl;
+//    }
 
-    if(pthread_join(pth,NULL))
-    {
-        cout<<"Could not join pth1"<<endl;
-    }
-
+    uint8 temp = 0;
 
     return 0;
-}
-
-void* SendAndReceive(void* arg)
-{
-    KvrChannel *ptr = (KvrChannel *)arg;
-
-    unsigned char data[8];
-    for(int i=0;i<8;i++)
-    {
-        data[i]='a';
-    }
-
-    while(ptr->getHandle()>=0)
-    {
-        ptr->setStatus(canWrite(ptr->getHandle(),1234,data,8,canMSG_EXT));
-        checkCanWrite(ptr->getStatus());
-        usleep(50000);
-    }
-
-    canClose(ptr->getHandle());
-
-    return (void *)0;
-}
-
-void checkCanWrite(canStatus stat_)
-{
-    if(stat_!=canOK)
-    {
-        cout<<"Oops, Can Message Write failed!"<<endl;
-    }
-    else
-    {
-        cout<<"Can Message Write successful!"<<endl;
-    }
 }

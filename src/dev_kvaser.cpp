@@ -6,11 +6,16 @@
  ************************************************************************/
 
 #include"dev_kvaser.h"
+#include"dbcparser.h"
+#include"body_dbc_conf.h"
 #include"unistd.h"
 #include"pthread.h"
 #include<iostream>
 
 using namespace std;
+
+extern DbcParserMsgTblType TBL_DP_DBCMSGLIST_Body_dbc_cfg[];
+extern uint16 u16s_dp_MsgTblSize_body_dbc_cfg;
 
 /*
 int InitKvaser(int baudrate, int channel)
@@ -85,111 +90,118 @@ int CloseKvaser(int channel)
     }
 
     return result;
-}
+}*/
 
 // frameType:0=standard frame, 1=extend frame
-canStatus TransmitMsg(int channel, long canId, byte data[], int dataLen, int frameType)
-{
-    WORD FT = canMSG_STD;
-    canStatus result;
-    if (g_ObserverFlag == true)
-    {
-        return result;
-    }
-    switch(frameType)
-    {
-    case 0:
-        FT = canMSG_STD;
-        break;
-    case 1:
-        FT = canMSG_EXT;
-        break;
-    }
-    if (g_ComDevice == 1)
-    {
-        result = canOK;
-        stg_EthCom.sendCanMsg(channel, canId, (char *)data, dataLen, frameType);
+//canStatus TransmitMsg(long canId, byte data[], int dataLen, int frameType)
+//{
 
-    }
-    else if( g_ComDevice == 0)
-    {
-        result = canWrite(m_DriverConfig->Channel[channel].hnd, canId, data, dataLen, FT);
-    }
-    return result;
-}
-*/
+//    canStatus result;
 
-int StartCanRxMsgTask(pthread_t pth,int kvaserChannelNo)
+//    result = canWrite(m_DriverConfig->Channel[channel].hnd, canId, data, dataLen, frameType);
+
+//    return result;
+//}
+
+
+void StartCanRxMsgTask(pthread_t* pth, KvrChannel* kvrObj)
 {
     int result = 0;
 
-    if (kvaserChannelNo < 0 || kvaserChannelNo > 3)
+    if (kvrObj->getIDChl() < 0 || kvrObj->getIDChl() > 3)
     {
         result = 1;
     }
     else
     {
-        switch (kvaserChannelNo)
+        switch (kvrObj->getIDChl())
         {
         case 0:
-            result = pthread_create(&pth, NULL, Proc_Can0RxMsg, NULL);
+            result = pthread_create(pth, NULL, Proc_Can0RxMsg, (void*)kvrObj);
             break;
         case 1:
-            result = pthread_create(&pth, NULL, Proc_Can0RxMsg, NULL);
+            result = pthread_create(pth, NULL, Proc_Can0RxMsg, (void*)kvrObj);
             break;
         case 2:
-            result = pthread_create(&pth, NULL, Proc_Can0RxMsg, NULL);
+            result = pthread_create(pth, NULL, Proc_Can0RxMsg, (void*)kvrObj);
             break;
         case 3:
-            result = pthread_create(&pth, NULL, Proc_Can0RxMsg, NULL);
+            result = pthread_create(pth, NULL, Proc_Can0RxMsg, (void*)kvrObj);
             break;
         default:
             break;
         }
     }
 
-    return result;
+    if(result)
+    {
+        cout<<"Create Thread "<< kvrObj->getIDChl() <<" failed!"<<endl;
+    }
+    else
+    {
+        cout<<"Create Thread "<< kvrObj->getIDChl() <<" successful!"<<endl;
+    }
 }
 
-int StartCanTxMsgTask(pthread_t pth,int kvaserChannelNo)
+void StartCanTxMsgTask(pthread_t* pth,KvrChannel* kvrObj)
 {
     int result = 0;
     //pthread_t pth;
-    if (kvaserChannelNo < 0 || kvaserChannelNo > 3)
+    if (kvrObj->getIDChl() < 0 || kvrObj->getIDChl() > 3)
     {
         result = 1;
     }
     else
     {
-        switch (kvaserChannelNo)
+        switch (kvrObj->getIDChl())
         {
         case 0:
-            result = pthread_create(&pth, NULL, Proc_Can0TxMsg, NULL);
+            result = pthread_create(pth, NULL, Proc_Can0TxMsg, (void*)kvrObj);
             break;
         case 1:
-            result = pthread_create(&pth, NULL, Proc_Can0TxMsg, NULL);
+            result = pthread_create(pth, NULL, Proc_Can0TxMsg, (void*)kvrObj);
             break;
         case 2:
-            result = pthread_create(&pth, NULL, Proc_Can0TxMsg, NULL);
+            result = pthread_create(pth, NULL, Proc_Can0TxMsg, (void*)kvrObj);
             break;
         case 3:
-            result = pthread_create(&pth, NULL, Proc_Can0TxMsg, NULL);
+            result = pthread_create(pth, NULL, Proc_Can0TxMsg, (void*)kvrObj);
             break;
         default:
             break;
         }
     }
 
-    return result;
+    if(result)
+    {
+        cout<<"Create Thread "<< kvrObj->getIDChl() <<" failed!"<<endl;
+    }
+    else
+    {
+        cout<<"Create Thread "<< kvrObj->getIDChl() <<" successful!"<<endl;
+    }
 }
 
 void* Proc_Can0TxMsg(void *arg)
 {
+    KvrChannel *kvrChl = (KvrChannel *)arg;
+
+//    unsigned char data[8];
+//    for(int i=0;i<8;i++)
+//    {
+//        data[i]=1;
+//    }
+
     while(1)
     {
-        cout<<"Can Message Send!"<<endl;
+//        cout<<"Can Message Send!"<<endl;
+        //ptr->setStatus(canWrite(ptr->getHandle(),0x11,data,8,canMSG_STD));
+        ecal_com_dp_ContructMsg(kvrChl, 0x112, TBL_DP_DBCMSGLIST_Body_dbc_cfg, u16s_dp_MsgTblSize_body_dbc_cfg);
         usleep(50000);
     }
+
+    canClose(kvrChl->getHandle());
+
     return (void*)0;
 }
 

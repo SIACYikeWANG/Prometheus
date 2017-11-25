@@ -4,30 +4,37 @@
 	> Mail: 
 	> Created Time: 2017年11月12日 星期日 15时50分20秒
  ************************************************************************/
-
 #ifndef _DBCPARSER_H
 #define _DBCPARSER_H
 
-#ifndef uint8
+#include "dev_kvaser.h"
+
+//#ifndef uint8
+// 1 Byte
 typedef signed char         sint8;          /*        -128 .. +127            */
 typedef unsigned char       uint8;          /*           0 .. 255             */
+// 2 Byte
 typedef signed short        sint16;         /*      -32768 .. +32767          */
 typedef unsigned short      uint16;         /*           0 .. 65535           */
+// 4 Byte
 typedef signed long         sint32;         /* -2147483648 .. +2147483647     */
 typedef unsigned long       uint32;         /*           0 .. 4294967295      */
+// 8 Byte
 typedef unsigned long long	uint64;
 typedef signed long long	sint64;
+// 4 Byte
 typedef float               float32;
+// 8 Byte
 typedef double              float64;
-#endif
+//#endif
 
-#ifndef ON
+//#ifndef ON
 #define ON 1
-#endif
+//#endif
 
-#ifndef OFF
+//#ifndef OFF
 #define OFF 0
-#endif
+//#endif
 
 #define DP_SIGNALTYPE_BOOL          ((uint8)0)
 #define DP_SIGNALTYPE_UINT8         ((uint8)1)
@@ -83,10 +90,10 @@ typedef struct
     AddrType pt_SignalTbl;				/* 信号表地址 */
     uint16 u16_TblSize;									/* 信号多少 */
     uint8  u8_Channel;									/* 通道 */
-    uint8 * pt_Buffer;									/* 使用缓存 */
-    uint8 * pt_RxFlag;									/* 接受置位Flag，仅接受方向有效 */
-    uint32 * pt_AgeCounter;								/* 计时器 */
-    uint16 * pt_TimerCounter;
+    uint8 *pt_Buffer;									/* 使用缓存 */
+    uint8 *pt_RxFlag;									/* 接受置位Flag，仅接受方向有效 */
+    uint32 *pt_AgeCounter;								/* 计时器 */
+    uint16 *pt_TimerCounter;
     uint8 u8_MsgLen;
     uint8 u8_MsgParserType;								/* 0=普通，1=分GroupId*/
 }DbcParserMsgTblType;
@@ -97,7 +104,7 @@ void ecal_com_dp_Init(DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
 void ecal_com_dp_RxMainFunction(DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
 void ecal_com_dp_RxIndication(uint8 hrh, uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buffer, DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
 //void ecal_com_dp_ContructMsg(uint32 u32t_canid, DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
-void ecal_com_dp_ContructMsg(uint32 u32t_canid, DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
+void ecal_com_dp_ContructMsg(KvrChannel *kvrChl, uint32 u32t_canid, DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
 
 
 #endif

@@ -4,11 +4,13 @@
 	> Mail: 
 	> Created Time: 2017年11月12日 星期日 15时50分34秒
  ************************************************************************/
-
 #ifndef _DEV_KVASER_H
 #define _DEV_KVASER_H
 
 #include "canlib.h"
+#include "kvrChannel.h"
+#include "dbcparser.h"
+#include "body_dbc_conf.h"
 
 #define MAX_CHANNELS 63   //cannot be more because waitforsingle object can "only" handle 64 events
 
@@ -43,8 +45,8 @@ typedef struct
 
 //int InitKvaser(int baudrate, int channel);
 //int CloseKvaser(int channel);
-int StartCanRxMsgTask(pthread_t pth, int kvaserChannelNo);
-int StartCanTxMsgTask(int kvaserChannelNo);
+void StartCanRxMsgTask(pthread_t* pth, KvrChannel* kvrObj);
+void StartCanTxMsgTask(pthread_t* pth, KvrChannel* kvrObj);
 
 void* Proc_Can0TxMsg(void *arg);
 void* Proc_Can0RxMsg(void *arg);

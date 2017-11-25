@@ -7,12 +7,11 @@
 
 #ifndef _KVRCHANNEL_H
 #define _KVRCHANNEL_H
-#endif
+
 
 #include<iostream>
 #include<canlib.h>
 #include<string.h>
-
 
 using namespace std;
 
@@ -25,13 +24,18 @@ class KvrChannel
         int idChl;
 
     public:
-        KvrChannel(int idChl_=0,int bitRate_=500000);
-        //~KvrChannel();
+        KvrChannel(int idChl_=0,int bitRate_=canBITRATE_500K);
+        ~KvrChannel();
         bool checkStatus();
         bool checkHandle();
         canHandle getHandle(){ return hnd;}
         canStatus getStatus(){ return stat;}
         canStatus getStatus(canStatus stat_){ stat = stat_; return stat;}
+        int getIDChl(){ return idChl; }
+        int getBitRate(){ return bitRate; }
         void setHandle(canHandle hnd_){ hnd = hnd_;}
         void setStatus(canStatus stat_){ stat = stat_;}
+        void setBitRate(int bitRate_){ bitRate = bitRate_;}
+        void setIDChl(int idChl_){ idChl = idChl_;}
 };
+#endif

@@ -587,7 +587,6 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
     uint8 u8t_buffer[8] = { 0 };
     uint8 u8t_tempdatalen;
     double ** ptt_signal;
-    //Can_PduType stt_pdu;
     uint8 u8t_channel;
     uint8 u8t_msglen;
     uint8 u8t_frameType;
@@ -610,87 +609,6 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
     {
         return;
     }
-
-    // Determin encoding mode
-    if (ptt_sigtbl[0].u8_ByteOrder==DP_BYTEORDER_MOTOROLA)
-    {
-        for( u8t_loop = pt_MsgTbl[u16t_loop].u16_TblSize ; u8t_loop >0  ; u8t_loop-- )
-        {
-            u8t_startpos = ptt_sigtbl[u8t_loop].u8_StartBit;
-            u8t_datalen = ptt_sigtbl[u8t_loop].u8_DataLen;
-            u8t_byteorder = ptt_sigtbl[u8t_loop].u8_ByteOrder;
-            f32t_factor = ptt_sigtbl[u8t_loop].f32_Factor;
-            f32t_offset = ptt_sigtbl[u8t_loop].f32_Offset;
-            f32t_max = ptt_sigtbl[u8t_loop].f32_Max;
-            f32t_min = ptt_sigtbl[u8t_loop].f32_Min;
-            u64t_value = (uint64)0;
-
-            switch (ptt_sigtbl->u8_Type)
-            {
-            case DP_SIGNALTYPE_UINT8:
-                break;
-            case DP_SIGNALTYPE_UINT16:
-                break;
-            case DP_SIGNALTYPE_UINT32:
-                break;
-            case DP_SIGNALTYPE_SINT8:
-                break;
-            case DP_SIGNALTYPE_SINT16:
-                break;
-            case DP_SIGNALTYPE_SINT32:
-                break;
-            case DP_SIGNALTYPE_FLOAT:
-                f32t_physval = *((double * )(ptt_sigtbl[u8t_loop].ad_Addr));
-
-                if( ptt_sigtbl[u8t_loop].u8_SignType == DP_SIGNTYPE_SIGNED && ptt_sigtbl[u8t_loop].u8_DataLen > 1)
-                {
-                    s64t_value = (sint64)((f32t_physval - f32t_offset) / f32t_factor);
-                    if (s64t_value >= 0)
-                    {
-
-                    }
-                    else //算补码
-                    {
-                        s64t_value = (s64t_value & 0x7FFFFFFF);//去掉最高位符号
-                        s64t_value = s64t_value | (((sint64)1) << (ptt_sigtbl[u8t_loop].u8_DataLen - 1));
-                        u64t_temp_1 = 0;
-                        for (int si = 0; si < ptt_sigtbl[u8t_loop].u8_DataLen; si++)
-                        {
-                            u64t_temp_1 = (u64t_temp_1 << 1) | 1;
-                        }
-                        s64t_value = s64t_value & u64t_temp_1;
-                    }
-                    u64t_value = (uint64)s64t_value;
-                }
-                else
-                {
-                    u64t_value = (f32t_physval - f32t_offset) / f32t_factor;
-                }
-                break;
-            case DP_SIGNALTYPE_IEEEFLOAT:
-                f4t_physval = *((float *)(ptt_sigtbl[u8t_loop].ad_Addr));
-                ptt_val = (uint32 *)&f4t_physval;
-                u64t_value = *ptt_val;
-                break;
-            case DP_SIGNALTYPE_IEEEDOUBLE:
-                f8t_physval = *((double *)(ptt_sigtbl[u8t_loop].ad_Addr));
-                ptt_val64 = (uint64 *)&f8t_physval;
-                u64t_value = *ptt_val64;
-                break;
-            default:
-                break;
-            }
-
-
-
-
-        }
-    }
-    else
-    {
-
-    }
-
 
     for ( u8t_loop = 0 ; u8t_loop < pt_MsgTbl[u16t_loop].u16_TblSize ; u8t_loop ++ )
     {
@@ -717,17 +635,9 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
         case DP_SIGNALTYPE_SINT32:
             break;
         case DP_SIGNALTYPE_FLOAT:
-            //*ptt_signal = (float *)ptt_sigtbl[u8t_loop].u32_Addr;
-            //f32t_physval = **ptt_signal;//(float * )(ptt_sigtbl[u8t_loop].u32_Addr);
+
             f32t_physval = *((double * )(ptt_sigtbl[u8t_loop].ad_Addr));
-            /*if ( f32t_physval > f32t_max)
-            {
-                f32t_physval = f32t_max;
-            }
-            else if ( f32t_physval < f32t_min )
-            {
-                f32t_physval = f32t_min;
-            }*/
+
             if( ptt_sigtbl[u8t_loop].u8_SignType == DP_SIGNTYPE_SIGNED && ptt_sigtbl[u8t_loop].u8_DataLen > 1)
             {
                 s64t_value = (sint64)((f32t_physval - f32t_offset) / f32t_factor);
@@ -738,16 +648,13 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
                 else //算补码
                 {
                     s64t_value = (s64t_value & 0x7FFFFFFF);//去掉最高位符号
-                    //s64t_value = ~s64t_value +1;//去掉最高位符号
                     s64t_value = s64t_value | (((sint64)1) << (ptt_sigtbl[u8t_loop].u8_DataLen - 1));
-                    //s64t_value = s64t_value << (32 - ptt_sigtbl[u8t_loop].u8_DataLen);
                     u64t_temp_1 = 0;
                     for (int si = 0; si < ptt_sigtbl[u8t_loop].u8_DataLen; si++)
                     {
                         u64t_temp_1 = (u64t_temp_1 << 1) | 1;
                     }
                     s64t_value = s64t_value & u64t_temp_1;
-                    //s64t_value = s64t_value >> (32 - ptt_sigtbl[u8t_loop].u8_DataLen);
                 }
                 u64t_value = (uint64)s64t_value;
             }
@@ -772,8 +679,8 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
 
         if (u8t_byteorder == DP_BYTEORDER_MOTOROLA)
         {
-/*
-            u8t_bytepos = u8t_startpos / 8;
+//            u8t_bytepos = u8t_startpos / 8;
+            u8t_bytepos = (u8t_startpos - u8t_datalen + 1)/8;
             s8t_shiftbit = (sint8)((sint8)u8t_datalen - (sint8)(u8t_startpos % 8) - (sint8)1);
             if ( s8t_shiftbit >= 0)
             {
@@ -800,7 +707,6 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
                     u8t_buffer[u8t_bytepos] = u8t_buffer[u8t_bytepos] | ((uint8)(u64t_value << (0 - s8t_shiftbit)));
                 }
             }
-*/
         }
         else
         {
@@ -825,25 +731,16 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
     {
         u8t_frameType = canMSG_STD;
     }
-//    if(CRC != nullptr)
-//    {
-//        CRC(u8t_buffer, u8t_msglen, pt_crcparam);
-//    }
-
-//    TransmitMsg(u8t_channel, u32t_canid, u8t_buffer, u8t_msglen, u8t_frameType);
-
-    //CanIf_Transmit(u32t_canid, &stt_pdu);
 
     kvrChl->setStatus(canWrite(kvrChl->getHandle(), u32t_canid, u8t_buffer, u8t_msglen, u8t_frameType));
-    if(kvrChl->getStatus()!=canOK)
-    {
-        cout<<"Can Write Failed!"<<endl;
-    }
-    else
-    {
-        cout<<"Can Write Successful!"<<endl;
-    }
-
+//    if(kvrChl->getStatus()!=canOK)
+//    {
+//        cout<<"Can Write Failed!"<<endl;
+//    }
+//    else
+//    {
+//        cout<<"Can Write Successful!"<<endl;
+//    }
 }
 
 void ecal_com_dp_SetRxStatus(uint8 status)

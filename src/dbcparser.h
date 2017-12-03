@@ -98,10 +98,11 @@ typedef struct
     uint8 u8_MsgParserType;								/* 0=普通，1=分GroupId*/
 }DbcParserMsgTblType;
 
-void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buffer, uint8 u8t_hrh, DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
+
 void ecal_com_dp_Init(DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
+void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buffer, uint8 u8t_hrh, DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
 //void ecal_com_dp_TxMainFunction(void);
-void ecal_com_dp_RxMainFunction(DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
+//void ecal_com_dp_RxMainFunction(DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
 void ecal_com_dp_RxIndication(uint8 hrh, uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buffer, DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
 //void ecal_com_dp_ContructMsg(uint32 u32t_canid, DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);
 void ecal_com_dp_ContructMsg(KvrChannel *kvrChl, uint32 u32t_canid, DbcParserMsgTblType * pt_MsgTbl, uint16 u16_tblSize);

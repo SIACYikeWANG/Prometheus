@@ -35,6 +35,8 @@ volatile const DbcParserSignalTblType TBL_DP_CAN1_112_SIGNALLIST[] =
 {
     {(AddrType)&EPS_StsReq_112_CAN1,           DP_SIGNALTYPE_FLOAT,  7,  8,  DP_BYTEORDER_MOTOROLA,    1,     0,    0,   1, DP_SIGNTYPE_UNSIGNED},
     {(AddrType)&EPS_SteeringAngleReq_112_CAN1, DP_SIGNALTYPE_FLOAT, 23, 16,  DP_BYTEORDER_MOTOROLA,    1,     0, -500, 500, DP_SIGNTYPE_UNSIGNED}
+//    {(AddrType)&EPS_StsReq_112_CAN1,           DP_SIGNALTYPE_FLOAT,  0,  8,  DP_BYTEORDER_INTEL,    1,     0,    0,   1, DP_SIGNTYPE_UNSIGNED},
+//    {(AddrType)&EPS_SteeringAngleReq_112_CAN1, DP_SIGNALTYPE_FLOAT,  8, 16,  DP_BYTEORDER_INTEL,    1,     0, -500, 500, DP_SIGNTYPE_UNSIGNED}
 };
 
 volatile const uint8 u8s_dp_CAN1_112_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_112_SIGNALLIST)/sizeof(DbcParserSignalTblType));

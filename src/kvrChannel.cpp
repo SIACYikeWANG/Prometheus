@@ -15,6 +15,12 @@ KvrChannel::KvrChannel(int idChl_,int bitRate_)
     bitRate = bitRate_;
 
     hnd = canOpenChannel(idChl,canOPEN_ACCEPT_VIRTUAL);
+
+    for(int i=0;i<8;i++)
+    {
+        data[i] = 0;
+    }
+
     if(checkHandle())
     {
         cout<<"Channel "<<idChl<<" Open successful!"<<endl;
@@ -93,5 +99,13 @@ bool KvrChannel::checkHandle()
     else
     {
         return true;
+    }
+}
+
+void KvrChannel::setData(unsigned char *data_, unsigned int dataLen_)
+{
+    for(int i=0;i<dataLen_;i++)
+    {
+        data[i] = data_[i];
     }
 }

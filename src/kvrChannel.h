@@ -22,6 +22,10 @@ class KvrChannel
         canStatus stat;
         int bitRate;
         int idChl;
+        unsigned char data[8];
+        unsigned int dataLen;
+        unsigned int flag;
+        unsigned long timeStamp;
 
     public:
         KvrChannel(int idChl_=0,int bitRate_=canBITRATE_500K);
@@ -33,9 +37,18 @@ class KvrChannel
         canStatus getStatus(canStatus stat_){ stat = stat_; return stat;}
         int getIDChl(){ return idChl; }
         int getBitRate(){ return bitRate; }
+        unsigned char* getData(){ return data;}
+        unsigned int getDataLen(){ return dataLen;}
+        unsigned int getFlag(){ return flag;}
+        unsigned long getTimeStamp(){ return timeStamp;}
         void setHandle(canHandle hnd_){ hnd = hnd_;}
         void setStatus(canStatus stat_){ stat = stat_;}
         void setBitRate(int bitRate_){ bitRate = bitRate_;}
         void setIDChl(int idChl_){ idChl = idChl_;}
+        void setData(unsigned char* data_, unsigned int dataLen_);
+        void setDataLen(unsigned int dataLen_){ dataLen = dataLen_;}
+        void setFlag(unsigned int flag_){ flag = flag_;}
+        void setTimeStamp(unsigned long timeStamp_){ timeStamp = timeStamp_;}
+
 };
 #endif

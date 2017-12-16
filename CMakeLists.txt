@@ -38,7 +38,13 @@ SET(PROMETHEUS
     )
 
 #6.add executable file，添加要编译的可执行文件
-ADD_EXECUTABLE(prometheus src/main.cpp src/kvrChannel.cpp src/dbcparser.cpp src/dev_kvaser.cpp src/body_dbc_conf.cpp src/thread_in_rx.cpp)
+ADD_EXECUTABLE(prometheus src/main.cpp
+                          src/kvrChannel.cpp
+                          src/dbcparser.cpp
+                          src/dev_kvaser.cpp
+                          src/body_dbc_conf.cpp
+                          src/thread_in_rx.cpp
+                          src/dbc_test.cpp)
 
 #7.add link library，添加可执行文件所需要的库，比如我们用到了libm.so（命名规则：lib+name+.so），就添加该库的名称
 TARGET_LINK_LIBRARIES(prometheus canlib pthread)

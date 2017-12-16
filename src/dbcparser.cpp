@@ -383,7 +383,7 @@ void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buff
     float t_value;
     uint32 * ptt_value;
     uint64 * ptt_value64;
-    float ** ptt_signal;
+//    float ** ptt_signal;
 
     for ( u16t_loop = (uint16)0 ; u16t_loop < u16_tblSize; u16t_loop++ )
     {
@@ -413,9 +413,10 @@ void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buff
             s8t_signallen = (sint8)(ptt_sigtbl[u8t_loop].u8_DataLen);
             if (u8t_byteorder == DP_BYTEORDER_MOTOROLA)
             {
-                u8t_bytepos = u8t_startpos / 8;	// 起始字节位
+                u8t_bytepos = (u8t_startpos - ptt_sigtbl[u8t_loop].u8_DataLen+1)/8;// 起始字节位
                 s8t_startbit = (sint8)u8t_startpos % 8;
                 //s8t_signallen = s8t_signallen - s8t_templen - 1;
+
                 // 将该字节不相关数据清零
                 u8t_tempdata = ptt_buffer[u8t_bytepos] << (8 - s8t_startbit - 1);
                 u8t_tempdata = u8t_tempdata >> (8 - s8t_startbit - 1);

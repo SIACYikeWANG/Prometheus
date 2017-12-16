@@ -61,7 +61,7 @@ DbcParserMsgTblType TBL_DP_DBCMSGLIST_Body_dbc_cfg[] =
 {
     {0x112, DP_MSGDIR_TX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_112_SIGNALLIST, u8s_dp_CAN1_112_SignalTblSize, 0, EPS_112_Buffer_CAN1, &EPS_112_RxFlag_CAN1, &EPS_112_AgeCounter_CAN1, &EPS_112_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL},
     {0x202, DP_MSGDIR_RX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_202_SIGNALLIST, u8s_dp_CAN1_202_SignalTblSize, 0, EPS_202_Buffer_CAN1, &EPS_202_RxFlag_CAN1, &EPS_202_AgeCounter_CAN1, &EPS_202_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL},
-    {0x300, DP_MSGDIR_RX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_300_SIGNALLIST, u8s_dp_CAN1_300_SignalTblSize, 0, ESP_300_Buffer_CAN1, &ESP_300_RxFlag_CAN1, &ESP_300_AgeCounter_CAN1, &ESP_300_TimeCounter_CAN1, 1, DP_MSGKIND_NORMAL}
+    {0x300, DP_MSGDIR_TX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_300_SIGNALLIST, u8s_dp_CAN1_300_SignalTblSize, 0, ESP_300_Buffer_CAN1, &ESP_300_RxFlag_CAN1, &ESP_300_AgeCounter_CAN1, &ESP_300_TimeCounter_CAN1, 1, DP_MSGKIND_NORMAL}
 };
 
 uint16 u16s_dp_MsgTblSize_body_dbc_cfg = (uint16)(sizeof(TBL_DP_DBCMSGLIST_Body_dbc_cfg)/sizeof(DbcParserMsgTblType));

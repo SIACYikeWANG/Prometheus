@@ -386,7 +386,6 @@ void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buff
     float t_value;
     uint32 * ptt_value;
     uint64 * ptt_value64;
-//    float ** ptt_signal;
 
     for ( u16t_loop = (uint16)0 ; u16t_loop < u16_tblSize; u16t_loop++ )
     {
@@ -416,7 +415,7 @@ void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buff
             u8t_lsbit = ptt_sigtbl[u8t_loop].u8_StartBit;
             s8t_signallen = (sint8)(ptt_sigtbl[u8t_loop].u8_DataLen);
 
-            if (u8t_byteorder == DP_BYTEORDER_MOTOROLA)
+            if(u8t_byteorder == DP_BYTEORDER_MOTOROLA)
             {
                 if((s8t_signallen+u8t_startpos-1)<=((u8t_startpos/8+1)*8-1)) //　非跨字节
                 {
@@ -450,98 +449,40 @@ void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buff
                         u64t_value |= (uint64)(ptt_buffer[u8t_bytepos]>>(u8t_lsbit-u8t_bytepos*8));
                     }
                 }
-
-////                u8t_bytepos = (u8t_startpos - ptt_sigtbl[u8t_loop].u8_DataLen+1)/8;// 起始字节位
-////                s8t_startbit = (sint8)u8t_startpos % 8;
-
-//                u8t_bytepos = u8t_startpos/8+1-(ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))/8; //起始字节位
-//                s8t_startbit = u8t_startpos%8;
-
-//                // 将该字节不相关数据清零
-//                u8t_tempdata = ptt_buffer[u8t_bytepos] << (8 - s8t_startbit - 1);
-//                u8t_tempdata = u8t_tempdata >> (8 - s8t_startbit - 1);
-
-//                // 跨字节数据
-//                if (s8t_signallen - s8t_startbit - 1 >= 0)
-//                {
-//                    s8t_signallen = s8t_signallen - s8t_startbit - 1;
-//                    u64t_value = ((uint64)u8t_tempdata << s8t_signallen);
-//                    s8t_signallen -= 8;
-//                    while (s8t_signallen > 0)
-//                    {
-//                        u8t_bytepos++;
-//                        u64t_value |= ((uint64)ptt_buffer[u8t_bytepos] << s8t_signallen);
-//                        s8t_signallen -= 8;
-//                    }
-//                    if (s8t_signallen == 0)
-//                    {
-//                        u8t_bytepos++;
-//                        u64t_value |= ((uint64)ptt_buffer[u8t_bytepos] << s8t_signallen);
-//                    }
-//                    else if (s8t_signallen < 0)
-//                    {
-//                        s8t_signallen = 0 - s8t_signallen;
-//                        if (s8t_signallen < 8)
-//                        {
-//                            u8t_bytepos++;
-//                            u64t_value |= ((uint64)ptt_buffer[u8t_bytepos] >> s8t_signallen);
-//                        }
-//                    }
-//                }
-//                else
-//                {
-//                    // 长度短，但起始位在高位，需右移两次，举例：startbit = 08 len = 02
-//                    if (s8t_signallen > 8 - s8t_startbit)
-//                    {
-//                        if (s8t_signallen - s8t_startbit > 0)
-//                        {
-//                            // 长度短，但起始位在低位，需右移两次，举例：startbit = 00 len = 02
-//                            u64t_value |= ((uint64)ptt_buffer[u8t_bytepos] >> s8t_startbit);
-//                            u8t_bytepos++;
-//                            u8t_tempdata = ptt_buffer[u8t_bytepos] << (s8t_startbit - s8t_signallen);
-//                            u64t_value |= ((uint64)u8t_tempdata >> (s8t_startbit - s8t_signallen));
-//                        }
-//                        else
-//                        {
-//                            // 长度短，但起始位在高位：startbit = 07 len = 02
-//                            u8t_tempdata = (ptt_buffer[u8t_bytepos] << (8 - s8t_startbit - 1));
-//                            u64t_value |= ((uint64)u8t_tempdata >> (8 - s8t_signallen));
-//                        }
-//                    }
-//                    else
-//                    {
-//                        // 长度短，但起始位不在高位，只需右移一次：startbit = 07 len = 02
-//                        u64t_value |= ((uint64)u8t_tempdata >> (s8t_startbit + 1 - s8t_signallen));
-//                    }
-//                }
             }
             else
             {
-                u8t_bytepos = u8t_startpos / 8;
-                s8t_shiftbit = (sint8)u8t_startpos % 8;
-                if (8 - s8t_shiftbit < s8t_signallen)
+                if((s8t_signallen+u8t_startpos-1)<=((u8t_startpos/8+1)*8-1)) // 非跨字节
                 {
-                    // 跨字节
-                    u64t_value |= ((uint64)ptt_buffer[u8t_bytepos] >> s8t_shiftbit);
-                    s8t_startbit = 8 - s8t_shiftbit;
-                    while (s8t_signallen - (uint8)s8t_startbit >= 8)
-                    {
-                        u8t_bytepos++;
-                        u64t_value |= ((uint64)ptt_buffer[u8t_bytepos] << s8t_startbit);
-                        s8t_startbit += 8;
-                    }
-                    u8t_bytepos++;
-                    u8t_tempdata = ptt_buffer[u8t_bytepos] << (8 - s8t_signallen + (uint8)s8t_startbit);
-                    u8t_tempdata = u8t_tempdata >> (8 - s8t_signallen + (uint8)s8t_startbit);
-                    u64t_value |= ((uint64)u8t_tempdata << s8t_startbit);
+                    u8t_bytepos = u8t_startpos/8;
+                    s8t_startbit = u8t_startpos%8;
+                    u8t_msbit = u8t_startpos+s8t_signallen-1;
+                    u8t_tempdata = ptt_buffer[u8t_bytepos]<<(8-(s8t_startbit+s8t_signallen));
+                    u64t_value = ((uint64)u8t_tempdata>>(8-s8t_signallen));
                 }
-                else
+                else // 跨字节
                 {
-                    // 非跨字节
-                    s8t_startbit = 8 - s8t_shiftbit - s8t_signallen;
-                    u8t_tempdata = ptt_buffer[u8t_bytepos] << (s8t_startbit);
-                    u8t_tempdata = u8t_tempdata >> (s8t_startbit + s8t_shiftbit);
-                    u64t_value = (uint64)u8t_tempdata;
+                    u8t_bytepos = (u8t_lsbit+s8t_signallen-1)/8;
+                    u8t_msbit = u8t_startpos+s8t_signallen-1;
+                    s8t_startbit = u8t_bytepos*8;
+
+                    u8t_tempdata = ptt_buffer[u8t_bytepos]<<(8-(u8t_msbit-s8t_startbit+1));
+                    u8t_tempdata = u8t_tempdata>>(8-(u8t_msbit-s8t_startbit+1));
+                    s8t_signallen -= (u8t_msbit-s8t_startbit+1);
+                    u64t_value = u8t_tempdata<<s8t_signallen;
+
+                    while(s8t_signallen/8)
+                    {
+                        u8t_bytepos--;
+                        s8t_signallen -= 8;
+                        u64t_value |= (uint64)(ptt_buffer[u8t_bytepos]<<s8t_signallen);
+                    }
+
+                    if(s8t_signallen!=0)
+                    {
+                        u8t_bytepos--;
+                        u64t_value |= (uint64)ptt_buffer[u8t_bytepos]>>(u8t_lsbit%8);
+                    }
                 }
             }
             switch (ptt_sigtbl->u8_Type)

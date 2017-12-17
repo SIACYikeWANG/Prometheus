@@ -44,7 +44,9 @@ void* Proc_ParseData_Srv0Can0(void *arg)
 //                cout<<"EPS_SteeringAngle_202_CAN1 = "<<EPS_SteeringAngle_202_CAN1<<endl;
 
                 ecal_com_dp_RxIndication(ptt_slot->channelNo, canId, msgLen, (uint8*)data, TBL_DP_DBCMSGLIST_DBCTest_dbc_cfg, u16s_dp_MsgTblSize_DBCTest_dbc_cfg);
-                printMotoCanMsg();
+                //printMotoCanMsg();
+                printIntelCanMsg();
+
                 t_rItr += 13;
             }
             ptt_slot->rxBufRItr = 0;

@@ -429,6 +429,16 @@ void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buff
                 {
                     u8t_bytepos = u8t_startpos/8-ceil((double)(ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))/8);
                     u8t_msbit = (u8t_bytepos+1)*8-1-(ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))%8;
+
+                    if((ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))%8)
+                    {
+                       u8t_msbit = u8t_bytepos*8-1+(ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))%8;
+                    }
+                    else
+                    {
+                       u8t_msbit = (u8t_bytepos+1)*8-1-(ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))%8;
+                    }
+
                     s8t_startbit = u8t_bytepos*8;
 
                     u8t_tempdata = ptt_buffer[u8t_bytepos]<<(8-(u8t_msbit-s8t_startbit+1));

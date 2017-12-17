@@ -10,7 +10,7 @@
 using namespace std;
 
 
-/* ID 400: */
+/* ID 240: */
 double Intel_Sig1_CAN1;
 double Intel_Sig2_CAN1;
 double Intel_Sig3_CAN1;
@@ -36,6 +36,20 @@ volatile const DbcParserSignalTblType TBL_DP_CAN1_240_SIGNALLIST[] =
 };
 
 volatile const uint8 u8s_dp_CAN1_240_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_240_SIGNALLIST)/sizeof(DbcParserSignalTblType));
+
+/* ID 241: */
+double Intel_Sig8_CAN1;
+uint8  Intel_Test_241_Buffer_CAN1[8];
+uint8  Intel_Test_241_RxFlag_CAN1;
+uint32 Intel_Test_241_AgeCounter_CAN1;
+uint16 Intel_Test_241_TimeCounter_CAN1;
+
+volatile const DbcParserSignalTblType TBL_DP_CAN1_241_SIGNALLIST[] =
+{
+    {(AddrType)&Intel_Sig8_CAN1, DP_SIGNALTYPE_FLOAT,  1,   30, DP_BYTEORDER_INTEL, 1,  -10000,  -10000,  10000, DP_SIGNTYPE_UNSIGNED}
+};
+
+volatile const uint8 u8s_dp_CAN1_241_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_241_SIGNALLIST)/sizeof(DbcParserSignalTblType));
 
 
 /* ID 250:  */
@@ -65,11 +79,28 @@ volatile const DbcParserSignalTblType TBL_DP_CAN1_250_SIGNALLIST[] =
 
 volatile const uint8 u8s_dp_CAN1_250_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_250_SIGNALLIST)/sizeof(DbcParserSignalTblType));
 
+/* ID 251: */
+double Moto_Sig8_CAN1;
+uint8  Moto_Test_251_Buffer_CAN1[8];
+uint8  Moto_Test_251_RxFlag_CAN1;
+uint32 Moto_Test_251_AgeCounter_CAN1;
+uint16 Moto_Test_251_TimeCounter_CAN1;
+
+volatile const DbcParserSignalTblType TBL_DP_CAN1_251_SIGNALLIST[] =
+{
+    {(AddrType)&Moto_Sig8_CAN1, DP_SIGNALTYPE_FLOAT,  24,   30, DP_BYTEORDER_MOTOROLA, 1,  -10000,  -10000,  10000, DP_SIGNTYPE_UNSIGNED}
+};
+
+volatile const uint8 u8s_dp_CAN1_251_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_251_SIGNALLIST)/sizeof(DbcParserSignalTblType));
+
+
 
 /* DBC Test Message List */
 DbcParserMsgTblType TBL_DP_DBCMSGLIST_DBCTest_dbc_cfg[] =
 {
     {0x240, DP_MSGDIR_RX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_240_SIGNALLIST, u8s_dp_CAN1_240_SignalTblSize, 0, Intel_Test_240_Buffer_CAN1, &Intel_Test_240_RxFlag_CAN1, &Intel_Test_240_AgeCounter_CAN1, &Intel_Test_240_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL},
+    {0x241, DP_MSGDIR_RX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_241_SIGNALLIST, u8s_dp_CAN1_241_SignalTblSize, 0, Intel_Test_241_Buffer_CAN1, &Intel_Test_241_RxFlag_CAN1, &Intel_Test_241_AgeCounter_CAN1, &Intel_Test_241_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL},
+    {0x251, DP_MSGDIR_RX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_251_SIGNALLIST, u8s_dp_CAN1_251_SignalTblSize, 0,  Moto_Test_251_Buffer_CAN1,  &Moto_Test_251_RxFlag_CAN1,  &Moto_Test_251_AgeCounter_CAN1,  &Moto_Test_251_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL},
     {0x250, DP_MSGDIR_RX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_250_SIGNALLIST, u8s_dp_CAN1_250_SignalTblSize, 0,  Moto_Test_250_Buffer_CAN1,  &Moto_Test_250_RxFlag_CAN1,  &Moto_Test_250_AgeCounter_CAN1,  &Moto_Test_250_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL}
 };
 

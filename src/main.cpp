@@ -14,6 +14,7 @@
 #include"body_dbc_conf.h"
 #include "dev_kvaser.h"
 #include "thread_in_rx.h"
+#include "dbc_test.h"
 
 using namespace std;
 
@@ -32,16 +33,31 @@ int main()
 //    KvrChannel kvrChl1(1,bitRate);
 
     pthread_t pth0,pth1;
-//    pthread_t pth2,pth3;
 
     EPS_StsReq_112_CAN1 = 1;
     EPS_SteeringAngleReq_112_CAN1 = 100;
+    Intel_Sig1_CAN1 = -100;
+    Intel_Sig2_CAN1 = -100;
+    Intel_Sig3_CAN1 = -100;
+    Intel_Sig4_CAN1 = -5;
+    Intel_Sig5_CAN1 = 1;
+    Intel_Sig6_CAN1 = 1;
+    Intel_Sig7_CAN1 = -100;
+    Intel_Sig8_CAN1 = -10000;
+    Moto_Sig1_CAN1 = 2000;
+    Moto_Sig2_CAN1 = -2000;
+    Moto_Sig3_CAN1 = 20000;
+    Moto_Sig4_CAN1 = 20;
+    Moto_Sig5_CAN1 = -100;
+    Moto_Sig6_CAN1 = -100;
+    Moto_Sig7_CAN1 = 100;
+    Moto_Sig8_CAN1 = -10000;
 
-    StartCanTxMsgTask(&pth0,&kvrChl0);
-    StartCanRxMsgTask(&pth1,&kvrChl0);
+    StartCanTxMsgTask(&pth0,&kvrChl0); // 开始发送
+    StartCanRxMsgTask(&pth1,&kvrChl0); // 开始接受
 
     pthread_t pth2;
-    int result = pthread_create(&pth2, NULL, Proc_ParseData_Srv0Can0, (void*)&stg_RxSlot[0]);
+    int result = pthread_create(&pth2, NULL, Proc_ParseData_Srv0Can0, (void*)&stg_RxSlot[0]); //　将收到的CAN数据通过DBC解析对应到变量
 
     if(result)
     {

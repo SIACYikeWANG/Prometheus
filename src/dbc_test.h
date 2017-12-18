@@ -34,9 +34,16 @@ extern uint8  Moto_Test_500_RxFlag_CAN1;
 extern uint32 Moto_Test_500_AgeCounter_CAN1;
 extern uint16 Moto_Test_500_TimeCounter_CAN1;
 
-extern double Moto_Sig8_CAN1;
 extern double Intel_Sig8_CAN1;
+extern uint8  Intel_Test_241_Buffer_CAN1[8];
+extern uint8  Intel_Test_241_RxFlag_CAN1;
+extern uint32 Intel_Test_241_AgeCounter_CAN1;
+extern uint16 Intel_Test_241_TimeCounter_CAN1;
 
-
+extern double Moto_Sig8_CAN1;
+extern uint8  Moto_Test_251_Buffer_CAN1[8];
+extern uint8  Moto_Test_251_RxFlag_CAN1;
+extern uint32 Moto_Test_251_AgeCounter_CAN1;
+extern uint16 Moto_Test_251_TimeCounter_CAN1;
 
 #endif

@@ -32,6 +32,8 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
     float f4t_physval;
     double f8t_physval;
     uint8 u8t_startpos;
+    uint8 u8t_lsbit;
+    uint8 u8t_msbit;
     uint8 u8t_datalen;
     uint8 u8t_byteorder;
     sint8 s8t_shiftbit;
@@ -64,6 +66,7 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
     for ( u8t_loop = 0 ; u8t_loop < pt_MsgTbl[u16t_loop].u16_TblSize ; u8t_loop ++ )
     {
         u8t_startpos = ptt_sigtbl[u8t_loop].u8_StartBit;
+        u8t_lsbit = u8t_startpos;
         u8t_datalen = ptt_sigtbl[u8t_loop].u8_DataLen;
         u8t_byteorder = ptt_sigtbl[u8t_loop].u8_ByteOrder;
         f32t_factor = ptt_sigtbl[u8t_loop].f32_Factor;
@@ -71,6 +74,7 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
         f32t_max = ptt_sigtbl[u8t_loop].f32_Max;
         f32t_min = ptt_sigtbl[u8t_loop].f32_Min;
         u64t_value = (uint64)0;
+
         switch (ptt_sigtbl->u8_Type)
         {
         case DP_SIGNALTYPE_UINT8:
@@ -89,12 +93,20 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
 
             f32t_physval = *((double * )(ptt_sigtbl[u8t_loop].ad_Addr));
 
+            if (f32t_physval > f32t_max)
+            {
+                f32t_physval = f32t_max;
+            }
+            else if (f32t_physval < f32t_min)
+            {
+                f32t_physval = f32t_min;
+            }
+
             if( ptt_sigtbl[u8t_loop].u8_SignType == DP_SIGNTYPE_SIGNED && ptt_sigtbl[u8t_loop].u8_DataLen > 1)
             {
                 s64t_value = (sint64)((f32t_physval - f32t_offset) / f32t_factor);
                 if (s64t_value >= 0)
                 {
-
                 }
                 else //算补码
                 {
@@ -128,48 +140,71 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
             break;
         }
 
-        if (u8t_byteorder == DP_BYTEORDER_MOTOROLA)
+
+        if (u8t_byteorder == DP_BYTEORDER_MOTOROLA) //　摩托罗拉格式
         {
-//            u8t_bytepos = u8t_startpos / 8;
-            u8t_bytepos = (u8t_startpos - u8t_datalen + 1)/8;
-            s8t_shiftbit = (sint8)((sint8)u8t_datalen - (sint8)(u8t_startpos % 8) - (sint8)1);
-            if ( s8t_shiftbit >= 0)
+            if((u8t_datalen+u8t_startpos-1)<=((u8t_startpos/8+1)*8-1)) // 非跨字节
             {
-//                cout<<"u64t_value = "<<bitset<64>(u64t_value)<<endl;
-//                cout<<"temp = "<<bitset<64>(u64t_value >> s8t_shiftbit)<<endl;
-//                cout<<"temp = "<<bitset<8>((uint8)(u64t_value >> s8t_shiftbit))<<endl;
-                u8t_buffer[u8t_bytepos] = u8t_buffer[u8t_bytepos] | ((uint8)(u64t_value >> s8t_shiftbit));
+                u8t_bytepos=u8t_startpos/8;
+                s8t_shiftbit=(sint8)(u8t_startpos%8);
+                u8t_msbit=u8t_lsbit+u8t_datalen-1;
+                u8t_buffer[u8t_bytepos]|=((uint8)u64t_value<<s8t_shiftbit);
             }
-            else
+            else //　跨字节
             {
-                u8t_buffer[u8t_bytepos] = u8t_buffer[u8t_bytepos] | ((uint8)(u64t_value << (0 - s8t_shiftbit)));
-            }
-            while ( s8t_shiftbit > 0 )
-            {
-                s8t_shiftbit -= 8;
-                u8t_bytepos++;
-                u8t_datalen -= 8;
-                if ( s8t_shiftbit >= 0)
+                u8t_bytepos = u8t_startpos/8-ceil((double)(ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))/8);
+
+                if((u8t_datalen-((u8t_startpos/8+1)*8-u8t_startpos))%8)
                 {
-                    u8t_buffer[u8t_bytepos] = u8t_buffer[u8t_bytepos] | ((uint8)(u64t_value >> s8t_shiftbit));
+                   u8t_msbit = u8t_bytepos*8-1+(u8t_datalen-((u8t_startpos/8+1)*8-u8t_startpos))%8;
                 }
                 else
                 {
-                    u8t_buffer[u8t_bytepos] = u8t_buffer[u8t_bytepos] | ((uint8)(u64t_value << (0 - s8t_shiftbit)));
+                   u8t_msbit = (u8t_bytepos+1)*8-1-(u8t_datalen-((u8t_startpos/8+1)*8-u8t_startpos))%8;
                 }
+
+                u8t_datalen-=(uint8)(u8t_msbit+1-floor((double)u8t_msbit/8)*8);
+                u8t_buffer[u8t_bytepos]|=((uint8)(u64t_value>>u8t_datalen));
+
+
+                while(u8t_datalen/8)
+                {
+                    u8t_bytepos++;
+                    u8t_datalen-=8;
+                    u8t_buffer[u8t_bytepos]|=((uint8)(u64t_value>>u8t_datalen));
+                }
+
+                if(u8t_datalen!=0)
+                {
+                    u8t_bytepos++;
+                    u8t_buffer[u8t_bytepos]|=((uint8)(u64t_value<<(8-u8t_datalen)));
+                }
+
             }
         }
-        else
+        else // 因特尔格式
         {
-            u8t_bytepos = u8t_startpos / 8;
+            u8t_bytepos = u8t_lsbit / 8;
             s8t_shiftbit = (sint8)(u8t_startpos % 8);
-            u8t_buffer[u8t_bytepos] = u8t_buffer[u8t_bytepos] | ((uint8)(u64t_value << s8t_shiftbit));
+            u8t_msbit = u8t_datalen+u8t_lsbit-1;
+
+            u8t_buffer[u8t_bytepos] |= ((uint8)(u64t_value << s8t_shiftbit));
             u8t_tempdatalen = 8 - (uint8)s8t_shiftbit;
-            while( u8t_datalen - u8t_tempdatalen > 0 )
+
+            if(u8t_msbit>((u8t_lsbit/8+1)*8-1)) //　跨字节
             {
-                u8t_bytepos++;
-                u8t_buffer[u8t_bytepos] = u8t_buffer[u8t_bytepos] | ((uint8)(u64t_value >> u8t_tempdatalen));
-                u8t_tempdatalen += 8;
+                while(u8t_datalen-u8t_tempdatalen>0)
+                {
+                    u8t_bytepos++;
+                    u8t_buffer[u8t_bytepos] |= ((uint8)(u64t_value >> u8t_tempdatalen));
+                    u8t_tempdatalen += 8;
+                }
+
+                if(u8t_datalen-u8t_tempdatalen<=0)
+                {
+                    u8t_bytepos++;
+                    u8t_buffer[u8t_bytepos] |= ((uint8)(u64t_value >> (u8t_msbit+1-(u8t_msbit+1)%8)));
+                }
             }
         }
     }
@@ -387,7 +422,7 @@ void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buff
     uint32 * ptt_value;
     uint64 * ptt_value64;
 
-    for ( u16t_loop = (uint16)0 ; u16t_loop < u16_tblSize; u16t_loop++ )
+    for(u16t_loop = (uint16)0 ; u16t_loop < u16_tblSize; u16t_loop++)
     {
         if (( u32t_canid == pt_MsgTbl[u16t_loop].u32_CanId )
                 &&(pt_MsgTbl[u16t_loop].u8_Dir == DP_MSGDIR_RX)
@@ -397,11 +432,13 @@ void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buff
             break;
         }
     }
+
     if ( u16t_loop == u16_tblSize)
     {
         return;
     }
-    if (pt_MsgTbl[u16t_loop].u8_MsgParserType == DP_MSGKIND_NORMAL)
+
+    if(pt_MsgTbl[u16t_loop].u8_MsgParserType == DP_MSGKIND_NORMAL)
     {
         for (u8t_loop = 0; u8t_loop < pt_MsgTbl[u16t_loop].u16_TblSize; u8t_loop++)
         {
@@ -428,7 +465,7 @@ void ecal_com_dp_ParseMsg(uint32 u32t_canid, uint8 u8t_datalen, uint8 * ptt_buff
                 else //　跨字节
                 {
                     u8t_bytepos = u8t_startpos/8-ceil((double)(ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))/8);
-                    u8t_msbit = (u8t_bytepos+1)*8-1-(ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))%8;
+                    //u8t_msbit = (u8t_bytepos+1)*8-1-(ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))%8;
 
                     if((ptt_sigtbl[u8t_loop].u8_DataLen-((u8t_startpos/8+1)*8-u8t_startpos))%8)
                     {

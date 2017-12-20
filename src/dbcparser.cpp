@@ -219,14 +219,6 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
     }
 
     kvrChl->setStatus(canWrite(kvrChl->getHandle(), u32t_canid, u8t_buffer, u8t_msglen, u8t_frameType));
-//    if(kvrChl->getStatus()!=canOK)
-//    {
-//        cout<<"Can Write Failed!"<<endl;
-//    }
-//    else
-//    {
-//        cout<<"Can Write Successful!"<<endl;
-//    }
 }
 
 void ecal_com_dp_SetRxStatus(uint8 status)

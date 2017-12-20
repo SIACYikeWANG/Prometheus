@@ -10,6 +10,7 @@
 #include"body_dbc_conf.h"
 #include"unistd.h"
 #include"pthread.h"
+#include "thread_in_rx.h"
 #include<iostream>
 
 using namespace std;
@@ -101,17 +102,18 @@ int CloseKvaser(int channel)
     return result;
 }*/
 
-// frameType:0=standard frame, 1=extend frame
-//canStatus TransmitMsg(long canId, byte data[], int dataLen, int frameType)
-//{
+/*
+ frameType:0=standard frame, 1=extend frame
+canStatus TransmitMsg(long canId, byte data[], int dataLen, int frameType)
+{
 
-//    canStatus result;
+    canStatus result;
 
-//    result = canWrite(m_DriverConfig->Channel[channel].hnd, canId, data, dataLen, frameType);
+    result = canWrite(m_DriverConfig->Channel[channel].hnd, canId, data, dataLen, frameType);
 
-//    return result;
-//}
-
+    return result;
+}
+*/
 
 void StartCanRxMsgTask(pthread_t* pth, KvrChannel* kvrObj)
 {
@@ -188,6 +190,20 @@ void StartCanTxMsgTask(pthread_t* pth,KvrChannel* kvrObj)
     else
     {
         cout<<"Create Thread "<< kvrObj->getIDChl() <<" successful!"<<endl;
+    }
+}
+
+void StartCanParserTask(pthread_t* pth)
+{
+    int result = pthread_create(pth, NULL, Proc_ParseData_Srv0Can0, (void*)&stg_RxSlot[0]); //　将收到的CAN数据通过DBC解析对应到变量
+
+    if(result)
+    {
+        cout<<"Create Thread CanMsgParser failed!"<<endl;
+    }
+    else
+    {
+        cout<<"Create Thread CanMsgParser successful!"<<endl;
     }
 }
 

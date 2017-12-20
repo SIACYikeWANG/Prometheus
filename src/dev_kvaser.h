@@ -60,6 +60,7 @@ typedef struct
 //int CloseKvaser(int channel);
 void StartCanRxMsgTask(pthread_t* pth, KvrChannel* kvrObj);
 void StartCanTxMsgTask(pthread_t* pth, KvrChannel* kvrObj);
+void StartCanParserTask(pthread_t* pth);
 
 void* Proc_Can0TxMsg(void *arg);
 void* Proc_Can0RxMsg(void *arg);

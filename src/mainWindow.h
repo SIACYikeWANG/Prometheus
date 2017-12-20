@@ -11,6 +11,13 @@
 #include <QMainWindow>
 #include <QKeyEvent>
 #include <iostream>
+#include "kvrChannel.h"
+#include <unistd.h>
+#include <pthread.h>
+#include "dbcparser.h"
+#include "dev_kvaser.h"
+#include "body_dbc_conf.h"
+#include "dbc_test.h"
 
 using namespace std;
 
@@ -29,6 +36,7 @@ public:
 
 private slots:
     void on_PanguGo_PushButton_clicked();
+    void on_Stop_PushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

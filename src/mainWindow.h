@@ -27,6 +27,9 @@ public:
     void keyPressEvent(QKeyEvent *e);
     ~MainWindow();
 
+private slots:
+    void on_PanguGo_PushButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

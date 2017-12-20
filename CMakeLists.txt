@@ -18,7 +18,8 @@ FILE(GLOB SRC_FILES "./*.cxx")
 FILE(GLOB HEAD_FILES "./*.h")
 FILE(GLOB UI_FILES "./*.ui")
 
-qt5_wrap_ui(WRAP_FILES ${UI_FILES})
+#QT5_WRAP_UI(WRAP_FILES ${UI_FILES})
+QT5_WRAP_UI(WRAP_FILES "mainwindow.ui")
 #set(RCC_FILES rcc.prc)
 source_group("ui" FILES ${UI_FILES} ${WRAP_FILES})
 

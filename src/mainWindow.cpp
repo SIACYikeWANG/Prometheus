@@ -36,3 +36,8 @@ void MainWindow::keyPressEvent(QKeyEvent *e)
             cout<<"Please press W/A/S/D to control the vehicle!"<<endl;
     }
 }
+
+void MainWindow::on_PanguGo_PushButton_clicked()
+{
+    cout<<"PanguGo PushButton pressed!"<<endl;
+}

@@ -30,32 +30,39 @@ int main(int argc, char *argv[])
     w.show();
 
     //Initialize kvaser library!
-    canInitializeLibrary();
+//    canInitializeLibrary();
 
-    int bitRate = canBITRATE_500K;
+//    int bitRate = canBITRATE_500K;
 
-    KvrChannel kvrChl0(0,bitRate);
+//    KvrChannel kvrChl0(0,bitRate);
 
-    pthread_t pth0,pth1,pth2;
+//    pthread_t pth0,pth1,pth2;
 
-    StartCanTxMsgTask(&pth0,&kvrChl0); // 开始发送
-    StartCanRxMsgTask(&pth1,&kvrChl0); // 开始接受
-    StartCanParserTask(&pth2); // Start Can message parsering
+//    StartCanTxMsgTask(&pth0,&kvrChl0); // 开始发送
+//    StartCanRxMsgTask(&pth1,&kvrChl0); // 开始接受
+//    StartCanParserTask(&pth2); // Start Can message parsering
 
-    if(pthread_join(pth0,NULL))
-    {
-        cout<<"Could not join pth0"<<endl;
-    }
+//    if(pthread_join(pth0,NULL))
+//    {
+//        cout<<"Could not join pth0"<<endl;
+//    }
 
-    if(pthread_join(pth1,NULL))
-    {
-        cout<<"Could not join pth1"<<endl;
-    }
+//    if(pthread_join(pth1,NULL))
+//    {
+//        cout<<"Could not join pth1"<<endl;
+//    }
 
-    if(pthread_join(pth2,NULL))
-    {
-        cout<<"Could not join pth2"<<endl;
-    }
-
+//    if(pthread_join(pth2,NULL))
+//    {
+//        cout<<"Could not join pth2"<<endl;
+//    }
+//    return 0;
     return a.exec();
+
+}
+
+void StartQtGui()
+{
+
+
 }

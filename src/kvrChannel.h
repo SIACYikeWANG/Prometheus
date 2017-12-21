@@ -30,6 +30,8 @@ class KvrChannel
     public:
         KvrChannel(int idChl_=0,int bitRate_=canBITRATE_500K);
         ~KvrChannel();
+        void KvrBusOn();
+        void KvrBusOff();
         bool checkStatus();
         bool checkHandle();
         canHandle getHandle(){ return hnd;}

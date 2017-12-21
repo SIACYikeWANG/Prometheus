@@ -40,6 +40,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    KvrChannel kvrChl0;
 };
 
 #endif

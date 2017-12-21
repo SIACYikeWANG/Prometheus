@@ -222,7 +222,7 @@ void* Proc_Can0TxMsg(void *arg)
 
         cout<<"Throttle = "<<ESP_Throttle_300_CAN1;
         cout<<"; EPS Angle Request = "<<EPS_SteeringAngleReq_112_CAN1;
-        cout<<"; EPS Status = "<<EPS_StsReq_112_CAN1;
+        cout<<"; EPS Status = "<<EPS_StsReq_112_CAN1<<endl;
         usleep(50000);
     }
 

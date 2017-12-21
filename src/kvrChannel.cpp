@@ -35,15 +35,15 @@ KvrChannel::KvrChannel(int idChl_,int bitRate_)
         cout<<"Channel "<<idChl<<" Set Parameters failed!"<<endl;
     }
 
-    stat = canBusOn(hnd);
-    if(checkStatus())
-    {
-        cout<<"Channel "<<idChl<<" Bus On successful!"<<endl;
-    }
-    else
-    {
-        cout<<"Channel "<<idChl<<" Bus On failed!"<<endl;
-    }
+//    stat = canBusOn(hnd);
+//    if(checkStatus())
+//    {
+//        cout<<"Channel "<<idChl<<" Bus On successful!"<<endl;
+//    }
+//    else
+//    {
+//        cout<<"Channel "<<idChl<<" Bus On failed!"<<endl;
+//    }
 }
 
 KvrChannel::~KvrChannel()
@@ -66,6 +66,32 @@ KvrChannel::~KvrChannel()
     else
     {
         cout<<"Channel "<<idChl<<" Bus Close failed!"<<endl;
+    }
+}
+
+void KvrChannel::KvrBusOn()
+{
+    stat = canBusOn(hnd);
+    if(checkStatus())
+    {
+        cout<<"Channel "<<idChl<<" Bus On successful!"<<endl;
+    }
+    else
+    {
+        cout<<"Channel "<<idChl<<" Bus On failed!"<<endl;
+    }
+}
+
+void KvrChannel::KvrBusOff()
+{
+    stat = canBusOff(hnd);
+    if(checkStatus())
+    {
+        cout<<"Channel "<<idChl<<" Bus Off successful!"<<endl;
+    }
+    else
+    {
+        cout<<"Channel "<<idChl<<" Bus Off failed!"<<endl;
     }
 }
 

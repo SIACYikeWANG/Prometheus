@@ -18,7 +18,7 @@ uint16 ESP_300_TimeCounter_CAN1;
 
 volatile const DbcParserSignalTblType TBL_DP_CAN1_300_SIGNALLIST[] =
 {
-    {(AddrType)&ESP_Throttle_300_CAN1, DP_SIGNALTYPE_FLOAT, 7, 8, DP_BYTEORDER_MOTOROLA, 0.390625, 0, 0, 100, DP_SIGNTYPE_UNSIGNED}
+    {(AddrType)&ESP_Throttle_300_CAN1, DP_SIGNALTYPE_FLOAT, 0, 8, DP_BYTEORDER_MOTOROLA, 0.390625, 0, 0, 100, DP_SIGNTYPE_UNSIGNED}
 };
 
 volatile const uint8 u8s_dp_CAN1_300_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_300_SIGNALLIST)/sizeof(DbcParserSignalTblType));
@@ -33,8 +33,8 @@ uint16 EPS_112_TimeCounter_CAN1;
 
 volatile const DbcParserSignalTblType TBL_DP_CAN1_112_SIGNALLIST[] =
 {
-    {(AddrType)&EPS_StsReq_112_CAN1,           DP_SIGNALTYPE_FLOAT,  7,  8,  DP_BYTEORDER_MOTOROLA,    1,     0,    0,   1, DP_SIGNTYPE_UNSIGNED},
-    {(AddrType)&EPS_SteeringAngleReq_112_CAN1, DP_SIGNALTYPE_FLOAT, 23, 16,  DP_BYTEORDER_MOTOROLA,    1,     0, -500, 500, DP_SIGNTYPE_UNSIGNED}
+    {(AddrType)&EPS_StsReq_112_CAN1,           DP_SIGNALTYPE_FLOAT,  0,  8,  DP_BYTEORDER_MOTOROLA,    1,     0,    0,   1, DP_SIGNTYPE_UNSIGNED},
+    {(AddrType)&EPS_SteeringAngleReq_112_CAN1, DP_SIGNALTYPE_FLOAT, 16, 16,  DP_BYTEORDER_MOTOROLA,    1,  -500, -500, 500, DP_SIGNTYPE_UNSIGNED}
 //    {(AddrType)&EPS_StsReq_112_CAN1,           DP_SIGNALTYPE_FLOAT,  0,  8,  DP_BYTEORDER_INTEL,    1,     0,    0,   1, DP_SIGNTYPE_UNSIGNED},
 //    {(AddrType)&EPS_SteeringAngleReq_112_CAN1, DP_SIGNALTYPE_FLOAT,  8, 16,  DP_BYTEORDER_INTEL,    1,     0, -500, 500, DP_SIGNTYPE_UNSIGNED}
 };
@@ -50,7 +50,7 @@ uint16 EPS_202_TimeCounter_CAN1;
 
 volatile const DbcParserSignalTblType TBL_DP_CAN1_202_SIGNALLIST[] =
 {
-    {(AddrType)&EPS_SteeringAngle_202_CAN1, DP_SIGNALTYPE_FLOAT, 23, 16, DP_BYTEORDER_MOTOROLA, 0.06, -1937, -480, 480, DP_SIGNTYPE_UNSIGNED}
+    {(AddrType)&EPS_SteeringAngle_202_CAN1, DP_SIGNALTYPE_FLOAT, 16, 16, DP_BYTEORDER_MOTOROLA, 0.06, -1937, -480, 480, DP_SIGNTYPE_UNSIGNED}
 };
 
 volatile const uint8 u8s_dp_CAN1_202_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_202_SIGNALLIST)/sizeof(DbcParserSignalTblType));

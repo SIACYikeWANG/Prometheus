@@ -20,7 +20,9 @@ MainWindow::MainWindow(QWidget *parent):
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    startPlotEnv();
+    timer_50ms = new QTimer(this);
+    connect(timer_50ms,SIGNAL(timeout()),this,SLOT(processOneThing()));
+    timer_50ms->start(50);
 }
 
 MainWindow::~MainWindow()
@@ -108,26 +110,9 @@ void MainWindow::on_Quit_PushButton_clicked()
     this->close();
 }
 
-void MainWindow::startPlotEnv()
+void MainWindow::processOneThing()
 {
-    /* start plot thread */
-    pthread_t pth_;
-
-    int result = pthread_create(&pth_, NULL, plotEnv, (void*)ui->customPlot);
-
-    if(result)
-    {
-        cout<<"Create Plot Environment Thread failed!"<<endl;
-    }
-    else
-    {
-        cout<<"Create Plot Environment Thread successful!"<<endl;
-    }
-
-    if(pthread_detach(pth_))
-    {
-        cout<<"Could not join pth_"<<endl;
-    }
+    cout<<"1"<<endl;
 }
 
 

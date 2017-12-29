@@ -32,17 +32,19 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     void keyPressEvent(QKeyEvent *e);
-    void startPlotEnv();
+//    void startPlotEnv();
     ~MainWindow();
 
 private slots:
     void on_PanguGo_PushButton_clicked();
     void on_Stop_PushButton_clicked();
     void on_Quit_PushButton_clicked();
+    void processOneThing();
 
 private:
     Ui::MainWindow *ui;
     KvrChannel kvrChl0;
+    QTimer *timer_50ms;
 };
 
 #endif

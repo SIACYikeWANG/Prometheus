@@ -8,7 +8,7 @@
 #include "body_dbc_conf.h"
 #include "dbc_test.h"
 #include "unistd.h"
-
+#include <time.h>
 
 extern DbcParserMsgTblType TBL_DP_DBCMSGLIST_Body_dbc_cfg[];
 extern uint16 u16s_dp_MsgTblSize_body_dbc_cfg;
@@ -16,17 +16,15 @@ extern uint16 u16s_dp_MsgTblSize_body_dbc_cfg;
 extern DbcParserMsgTblType TBL_DP_DBCMSGLIST_DBCTest_dbc_cfg[];
 extern uint16 u16s_dp_MsgTblSize_DBCTest_dbc_cfg;
 
-
-
-void printMotoCanMsg();
-void printIntelCanMsg();
-
 void* Proc_ParseData_Srv0Can0(void *arg)
 {
     RxSlotType* ptt_slot = (RxSlotType*)arg;
 
+//    clock_t startTime, endTime;
+
     while(1)
     {
+//        startTime = clock();
         ptt_slot->rxDataInProcFlag = true;
         if(ptt_slot->rxBufRItr<ptt_slot->rxBufWItr)
         {
@@ -49,6 +47,8 @@ void* Proc_ParseData_Srv0Can0(void *arg)
             ptt_slot->rxBufWItr = 0;
         }
         ptt_slot->rxDataInProcFlag = false;
+//        endTime = clock();
+//        cout<<"Run Time = "<<(double)(endTime - startTime)/CLOCKS_PER_SEC<<endl;
         usleep(10000);
     }
 }

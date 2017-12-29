@@ -9,5 +9,7 @@
 #define _THREAD_IN_RX_H
 
 void* Proc_ParseData_Srv0Can0(void *arg);
+void printMotoCanMsg();
+void printIntelCanMsg();
 
 #endif

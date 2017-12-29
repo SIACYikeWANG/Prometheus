@@ -13,6 +13,7 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt5Widgets)
 find_package(Qt5Core)
 find_package(Qt5Gui)
+find_package(Qt5PrintSupport)
 
 FILE(GLOB SRC_FILES "./*.cxx")
 FILE(GLOB HEAD_FILES "./*.h")
@@ -49,7 +50,7 @@ INCLUDE_DIRECTORIES( include )
 AUX_SOURCE_DIRECTORY(src DIR_SRCS)
 
 #5.set environment variable，设置环境变量，编译用到的源文件全部都要放到这里，否则编译能够通过，但是执行的时候会出现各种问题，比如"symbol lookup error xxxxx , undefined symbol"
-SET(PROMETHEUS ${DIR_SRCS} )
+SET(PROMETHEUS ${DIR_SRCS})
 
 #6.add executable file，添加要编译的可执行文件
 ADD_EXECUTABLE(${PROJECT_NAME} ${WRAP_FILES}
@@ -60,7 +61,9 @@ ADD_EXECUTABLE(${PROJECT_NAME} ${WRAP_FILES}
                                src/body_dbc_conf.cpp
                                src/thread_in_rx.cpp
                                src/dbc_test.cpp
-                               src/mainWindow.cpp)
+                               src/mainWindow.cpp
+                               src/qcustomplot.cpp
+                               src/plotEnv.cpp)
 
 #7.add link library，添加可执行文件所需要的库，比如我们用到了libm.so（命名规则：lib+name+.so），就添加该库的名称
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} canlib pthread Qt5::Widgets Qt5::Core Qt5::Gui)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} canlib pthread Qt5::Widgets Qt5::Core Qt5::Gui Qt5::PrintSupport)

@@ -7,6 +7,7 @@
 
 #include "mainWindow.h"
 #include "ui_mainwindow.h"
+#include "plotEnv.h"
 
 //extern double ESP_Throttle_300_CAN1;
 //extern double EPS_StsReq_112_CAN1;
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent):
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    startPlotEnv();
 }
 
 MainWindow::~MainWindow()
@@ -63,8 +65,6 @@ void MainWindow::on_PanguGo_PushButton_clicked()
     EPS_StsReq_112_CAN1 = 1;
     EPS_SteeringAngleReq_112_CAN1 = 0;
 
-//    int bitRate = canBITRATE_500K;
-//    KvrChannel kvrChl0(0,bitRate);
     kvrChl0.KvrBusOn();
 
     pthread_t pth0,pth1,pth2;
@@ -97,3 +97,37 @@ void MainWindow::on_Stop_PushButton_clicked()
 
     kvrChl0.KvrBusOff();
 }
+
+void MainWindow::on_Quit_PushButton_clicked()
+{
+    ESP_Throttle_300_CAN1 = 0;
+    EPS_StsReq_112_CAN1 = 0;
+    EPS_SteeringAngleReq_112_CAN1 = 0;
+
+    kvrChl0.KvrBusOff();
+    this->close();
+}
+
+void MainWindow::startPlotEnv()
+{
+    /* start plot thread */
+    pthread_t pth_;
+
+    int result = pthread_create(&pth_, NULL, plotEnv, (void*)ui->customPlot);
+
+    if(result)
+    {
+        cout<<"Create Plot Environment Thread failed!"<<endl;
+    }
+    else
+    {
+        cout<<"Create Plot Environment Thread successful!"<<endl;
+    }
+
+    if(pthread_detach(pth_))
+    {
+        cout<<"Could not join pth_"<<endl;
+    }
+}
+
+

@@ -54,16 +54,14 @@ typedef struct
     int rxBufRItr;
 }RxSlotType;
 
-
-
-//int InitKvaser(int baudrate, int channel);
-//int CloseKvaser(int channel);
 void StartCanRxMsgTask(pthread_t* pth, KvrChannel* kvrObj);
 void StartCanTxMsgTask(pthread_t* pth, KvrChannel* kvrObj);
 void StartCanParserTask(pthread_t* pth);
 
 void* Proc_Can0TxMsg(void *arg);
 void* Proc_Can0RxMsg(void *arg);
+void copyCanDataToBuf(KvaserCanMsgType kvrCanMsg, RxSlotType* pt_slot);
+void dispCanMsg(KvaserCanMsgType kvrCanMsg_);
 
 
 //void UpdateTTCWarning(int warnFlg, RadarLocation l);

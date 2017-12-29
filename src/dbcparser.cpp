@@ -107,6 +107,7 @@ void ecal_com_dp_ContructMsg(KvrChannel *kvrChl,uint32 u32t_canid, DbcParserMsgT
                 s64t_value = (sint64)((f32t_physval - f32t_offset) / f32t_factor);
                 if (s64t_value >= 0)
                 {
+
                 }
                 else //算补码
                 {

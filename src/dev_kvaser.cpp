@@ -5,13 +5,14 @@
 	> Created Time: 2017年11月12日 星期日 15时50分30秒
  ************************************************************************/
 
-#include"dev_kvaser.h"
-#include"dbcparser.h"
-#include"body_dbc_conf.h"
-#include"unistd.h"
-#include"pthread.h"
+#include "dev_kvaser.h"
+#include "dbcparser.h"
+#include "body_dbc_conf.h"
+#include "unistd.h"
+#include "pthread.h"
 #include "thread_in_rx.h"
-#include<iostream>
+#include <iostream>
+#include <time.h>
 
 using namespace std;
 
@@ -21,99 +22,8 @@ extern DbcParserMsgTblType TBL_DP_DBCMSGLIST_DBCTest_dbc_cfg[];
 extern uint16 u16s_dp_MsgTblSize_DBCTest_dbc_cfg;
 
 KvaserCanMsgType stg_CanRxMsg_0;
-
 RxSlotType stg_RxSlot[8];
 
-void copyCanDataToBuf(KvaserCanMsgType kvrCanMsg, RxSlotType* pt_slot);
-void dispCanMsg(KvaserCanMsgType kvrCanMsg_);
-
-/*
-int InitKvaser(int baudrate, int channel)
-{
-    int result = 1;
-    int stat;
-    m_DriverConfig->Channel[channel].driverMode = canDRIVER_NORMAL;
-    canInitializeLibrary();
-    canHandle hnd;
-
-    hnd = canOpenChannel(channel, canOPEN_OVERRIDE_EXCLUSIVE);
-    if( hnd < 0 )
-    {
-        // 打开错误
-        qDebug("Open Kvaser Error.\n");
-    }
-    else
-    {
-        // 成功打开
-        qDebug("Open Kvaser successfully.\n");
-
-        m_channelData.Channel[channel].hnd = hnd;
-        if ((stat = canIoCtl(hnd, canIOCTL_FLUSH_TX_BUFFER, NULL, NULL)) != canOK)
-        qDebug("ERROR canIoCtl(canIOCTL_FLUSH_TX_BUFFER) FAILED, Err= %d <line: %d>\n", stat, __LINE__);
-
-        // 配置波特率
-        switch(baudrate)
-        {
-        case 125:
-            m_usedBaudRate = BAUD_125K;
-            break;
-        case 250:
-            m_usedBaudRate = BAUD_250K;
-            break;
-        case 500:
-            m_usedBaudRate = BAUD_500K;
-            break;
-        case 1000:
-            m_usedBaudRate = BAUD_1M;
-            break;
-        default:
-            m_usedBaudRate = BAUD_500K;
-        }
-        stat = canSetBusParams(hnd, m_usedBaudRate, 0, 0, 0, 0, 0);
-
-        canBusOn(hnd);
-
-        result = 0;
-    }
-    return result;
-}
-
-
-int CloseKvaser(int channel)
-{
-    int result = 0;
-    int stat;
-
-    stat = canBusOff(m_channelData.Channel[channel].hnd);
-    if( stat != canOK)
-    {
-        qDebug("ERROR canBusOff() FAILED Err= %d. <line: %d>\n", stat, __LINE__);
-        result = 1;
-    }
-
-    stat = canClose(m_channelData.Channel[channel].hnd);
-    if (stat != canOK)
-    {
-        qDebug("ERROR canClose() in Cleanup() FAILED Err= %d. <line: %d>\n",
-                      stat, __LINE__);
-        result = 1;
-    }
-
-    return result;
-}*/
-
-/*
- frameType:0=standard frame, 1=extend frame
-canStatus TransmitMsg(long canId, byte data[], int dataLen, int frameType)
-{
-
-    canStatus result;
-
-    result = canWrite(m_DriverConfig->Channel[channel].hnd, canId, data, dataLen, frameType);
-
-    return result;
-}
-*/
 
 void StartCanRxMsgTask(pthread_t* pth, KvrChannel* kvrObj)
 {
@@ -157,7 +67,7 @@ void StartCanRxMsgTask(pthread_t* pth, KvrChannel* kvrObj)
 void StartCanTxMsgTask(pthread_t* pth,KvrChannel* kvrObj)
 {
     int result = 0;
-    //pthread_t pth;
+
     if (kvrObj->getIDChl() < 0 || kvrObj->getIDChl() > 3)
     {
         result = 1;
@@ -227,7 +137,6 @@ void* Proc_Can0TxMsg(void *arg)
     }
 
     canClose(kvrChl->getHandle());
-
     return (void*)0;
 }
 

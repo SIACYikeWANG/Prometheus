@@ -20,14 +20,18 @@ MainWindow::MainWindow(QWidget *parent):
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    timer_50ms = new QTimer(this);
-    connect(timer_50ms,SIGNAL(timeout()),this,SLOT(processOneThing()));
-    timer_50ms->start(50);
+
+    serialThread = new SerialThread();
+
+//    timer_50ms = new QTimer(this);
+//    connect(timer_50ms,SIGNAL(timeout()),this,SLOT(processOneThing()));
+//    timer_50ms->start(50);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete serialThread;
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -89,6 +93,9 @@ void MainWindow::on_PanguGo_PushButton_clicked()
     {
         cout<<"Could not join pth2"<<endl;
     }
+
+    serialThread->start();
+
 }
 
 void MainWindow::on_Stop_PushButton_clicked()
@@ -96,6 +103,9 @@ void MainWindow::on_Stop_PushButton_clicked()
     ESP_Throttle_300_CAN1 = 0;
     EPS_StsReq_112_CAN1 = 0;
     EPS_SteeringAngleReq_112_CAN1 = 0;
+
+    serialThread->terminate();
+    serialThread->wait();
 
     kvrChl0.KvrBusOff();
 }

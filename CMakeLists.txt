@@ -14,6 +14,7 @@ find_package(Qt5Widgets)
 find_package(Qt5Core)
 find_package(Qt5Gui)
 find_package(Qt5PrintSupport)
+find_package(Qt5SerialPort)
 
 FILE(GLOB SRC_FILES "./*.cxx")
 FILE(GLOB HEAD_FILES "./*.h")
@@ -63,7 +64,8 @@ ADD_EXECUTABLE(${PROJECT_NAME} ${WRAP_FILES}
                                src/dbc_test.cpp
                                src/mainWindow.cpp
                                src/qcustomplot.cpp
-                               src/plotEnv.cpp)
+                               src/plotEnv.cpp
+                               src/serialthread.cpp)
 
 #7.add link library，添加可执行文件所需要的库，比如我们用到了libm.so（命名规则：lib+name+.so），就添加该库的名称
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} canlib pthread Qt5::Widgets Qt5::Core Qt5::Gui Qt5::PrintSupport)
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} canlib pthread Qt5::Widgets Qt5::Core Qt5::Gui Qt5::PrintSupport Qt5::SerialPort)

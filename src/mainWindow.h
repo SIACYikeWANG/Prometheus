@@ -18,6 +18,7 @@
 #include "dev_kvaser.h"
 #include "body_dbc_conf.h"
 #include "dbc_test.h"
+#include "serialthread.h"
 
 using namespace std;
 
@@ -43,8 +44,10 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    SerialThread *serialThread;
     KvrChannel kvrChl0;
-    QTimer *timer_50ms;
+
+//    QTimer *timer_50ms;
 };
 
 #endif

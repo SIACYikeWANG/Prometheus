@@ -56,12 +56,32 @@ volatile const DbcParserSignalTblType TBL_DP_CAN1_202_SIGNALLIST[] =
 volatile const uint8 u8s_dp_CAN1_202_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_202_SIGNALLIST)/sizeof(DbcParserSignalTblType));
 
 
+double VehSts_LonVel_A8_CAN1;
+double VehSts_BeamSts_A8_CAN1;
+uint8 VehSts_A8_Buffer_CAN1[8];
+uint8 VehSts_A8_RxFlag_CAN1;
+uint32 VehSts_A8_AgeCounter_CAN1;
+uint16 VehSts_A8_TimeCounter_CAN1;
+
+volatile const DbcParserSignalTblType TBL_DP_CAN1_A8_SIGNALLIST[] =
+{
+    { (AddrType)&VehSts_LonVel_A8_CAN1, DP_SIGNALTYPE_FLOAT,  0,  8,  DP_BYTEORDER_MOTOROLA, 0.470588,     0,    0,   120, DP_SIGNTYPE_UNSIGNED},
+    {(AddrType)&VehSts_BeamSts_A8_CAN1, DP_SIGNALTYPE_FLOAT,  8,  2,  DP_BYTEORDER_MOTOROLA,        1,     0,    0,     2, DP_SIGNTYPE_UNSIGNED}
+//    {(AddrType)&EPS_StsReq_112_CAN1,           DP_SIGNALTYPE_FLOAT,  0,  8,  DP_BYTEORDER_INTEL,    1,     0,    0,   1, DP_SIGNTYPE_UNSIGNED},
+//    {(AddrType)&EPS_SteeringAngleReq_112_CAN1, DP_SIGNALTYPE_FLOAT,  8, 16,  DP_BYTEORDER_INTEL,    1,     0, -500, 500, DP_SIGNTYPE_UNSIGNED}
+};
+
+volatile const uint8 u8s_dp_CAN1_A8_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_A8_SIGNALLIST)/sizeof(DbcParserSignalTblType));
+
+
+
 /* Body Message List */
 DbcParserMsgTblType TBL_DP_DBCMSGLIST_Body_dbc_cfg[] =
 {
-    {0x112, DP_MSGDIR_TX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_112_SIGNALLIST, u8s_dp_CAN1_112_SignalTblSize, 0, EPS_112_Buffer_CAN1, &EPS_112_RxFlag_CAN1, &EPS_112_AgeCounter_CAN1, &EPS_112_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL},
-    {0x202, DP_MSGDIR_RX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_202_SIGNALLIST, u8s_dp_CAN1_202_SignalTblSize, 0, EPS_202_Buffer_CAN1, &EPS_202_RxFlag_CAN1, &EPS_202_AgeCounter_CAN1, &EPS_202_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL},
-    {0x300, DP_MSGDIR_TX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_300_SIGNALLIST, u8s_dp_CAN1_300_SignalTblSize, 0, ESP_300_Buffer_CAN1, &ESP_300_RxFlag_CAN1, &ESP_300_AgeCounter_CAN1, &ESP_300_TimeCounter_CAN1, 1, DP_MSGKIND_NORMAL}
+    {0x112, DP_MSGDIR_TX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_112_SIGNALLIST, u8s_dp_CAN1_112_SignalTblSize, 0,   EPS_112_Buffer_CAN1,    &EPS_112_RxFlag_CAN1,   &EPS_112_AgeCounter_CAN1,   &EPS_112_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL},
+    {0x202, DP_MSGDIR_RX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_202_SIGNALLIST, u8s_dp_CAN1_202_SignalTblSize, 0,   EPS_202_Buffer_CAN1,    &EPS_202_RxFlag_CAN1,   &EPS_202_AgeCounter_CAN1,   &EPS_202_TimeCounter_CAN1, 3, DP_MSGKIND_NORMAL},
+    {0x300, DP_MSGDIR_TX, DP_PERIODICMACRO, 100, (AddrType)TBL_DP_CAN1_300_SIGNALLIST, u8s_dp_CAN1_300_SignalTblSize, 0,   ESP_300_Buffer_CAN1,    &ESP_300_RxFlag_CAN1,   &ESP_300_AgeCounter_CAN1,   &ESP_300_TimeCounter_CAN1, 1, DP_MSGKIND_NORMAL},
+    { 0xA8, DP_MSGDIR_TX, DP_PERIODICMACRO, 100,  (AddrType)TBL_DP_CAN1_A8_SIGNALLIST,  u8s_dp_CAN1_A8_SignalTblSize, 0, VehSts_A8_Buffer_CAN1,  &VehSts_A8_RxFlag_CAN1, &VehSts_A8_AgeCounter_CAN1, &VehSts_A8_TimeCounter_CAN1, 8, DP_MSGKIND_NORMAL}
 };
 
 uint16 u16s_dp_MsgTblSize_body_dbc_cfg = (uint16)(sizeof(TBL_DP_DBCMSGLIST_Body_dbc_cfg)/sizeof(DbcParserMsgTblType));

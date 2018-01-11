@@ -28,4 +28,12 @@ extern double EBS_BrakePadel_228_CAN1;
 
 extern double BCM_Gear_AA_CAN1;
 
+extern double VehSts_LonVel_A8_CAN1;
+extern double VehSts_BeamSts_A8_CAN1;
+extern unsigned char VehSts_A8_Buffer_CAN1[8];
+extern unsigned char VehSts_A8_RxFlag_CAN1;
+extern unsigned long VehSts_A8_AgeCounter_CAN1;
+extern unsigned short VehSts_A8_TimeCounter_CAN1;
+
+
 #endif

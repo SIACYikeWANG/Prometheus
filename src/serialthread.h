@@ -5,6 +5,10 @@
 #include <unistd.h>
 #include <QSerialPort>
 #include <QSerialPortInfo>
+#include "body_dbc_conf.h"
+#include "iostream"
+
+using namespace std;
 
 class SerialThread : public QThread
 {
@@ -14,6 +18,7 @@ public:
     ~SerialThread();
 
     void dataProc(int dLength);
+//    void dataProc();
 
 private:
 //    QSerialPort qSerialPort;

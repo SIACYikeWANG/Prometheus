@@ -197,7 +197,7 @@ void SerialThread::dataProc(int dLength)
                     lonVel = eastVel * sin(heading) + northVel * cos(heading);
                     latVel = eastVel * cos(heading) - northVel * sin(heading);
 
-//                    qDebug()<<"lonVel = "<<lonVel<<"; latVel = "<<latVel;
+                    qDebug()<<"lonVel = "<<lonVel<<"; latVel = "<<latVel;
 //                    VehSts_LonVel_A8_CAN1 = double(lonVel*3.6);
 //                    memset(rxData,0,53);
 //                    memset(rxDataTemp,0,53);

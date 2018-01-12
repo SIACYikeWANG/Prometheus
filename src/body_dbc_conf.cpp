@@ -65,10 +65,10 @@ uint16 VehSts_A8_TimeCounter_CAN1;
 
 volatile const DbcParserSignalTblType TBL_DP_CAN1_A8_SIGNALLIST[] =
 {
-    { (AddrType)&VehSts_LonVel_A8_CAN1, DP_SIGNALTYPE_FLOAT,  0,  8,  DP_BYTEORDER_MOTOROLA, 0.470588,     0,    0,   120, DP_SIGNTYPE_UNSIGNED},
-    {(AddrType)&VehSts_BeamSts_A8_CAN1, DP_SIGNALTYPE_FLOAT,  8,  2,  DP_BYTEORDER_MOTOROLA,        1,     0,    0,     2, DP_SIGNTYPE_UNSIGNED}
-//    {(AddrType)&EPS_StsReq_112_CAN1,           DP_SIGNALTYPE_FLOAT,  0,  8,  DP_BYTEORDER_INTEL,    1,     0,    0,   1, DP_SIGNTYPE_UNSIGNED},
-//    {(AddrType)&EPS_SteeringAngleReq_112_CAN1, DP_SIGNALTYPE_FLOAT,  8, 16,  DP_BYTEORDER_INTEL,    1,     0, -500, 500, DP_SIGNTYPE_UNSIGNED}
+    { (AddrType)&VehSts_LonVel_A8_CAN1, DP_SIGNALTYPE_FLOAT,  13, 11,  DP_BYTEORDER_MOTOROLA, 0.0586510264,     0,    0,   120, DP_SIGNTYPE_UNSIGNED},
+    {(AddrType)&VehSts_BeamSts_A8_CAN1, DP_SIGNALTYPE_FLOAT,   8,  2,  DP_BYTEORDER_MOTOROLA,            1,     0,    0,     2, DP_SIGNTYPE_UNSIGNED}
+//    {(AddrType)&EPS_StsReq_112_CAN1,           DP_SIGNALTYPE_FLOAT,  0,  8,  DP_BYTEORDER_INTEL,      1,     0,    0,   1, DP_SIGNTYPE_UNSIGNED},
+//    {(AddrType)&EPS_SteeringAngleReq_112_CAN1, DP_SIGNALTYPE_FLOAT,  8, 16,  DP_BYTEORDER_INTEL,      1,     0, -500, 500, DP_SIGNTYPE_UNSIGNED}
 };
 
 volatile const uint8 u8s_dp_CAN1_A8_SignalTblSize = (uint8)(sizeof(TBL_DP_CAN1_A8_SIGNALLIST)/sizeof(DbcParserSignalTblType));

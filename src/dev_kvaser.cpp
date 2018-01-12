@@ -123,8 +123,8 @@ void* Proc_Can0TxMsg(void *arg)
 
     while(1)
     {
-//        VehSts_LonVel_A8_CAN1 = 30;
-//        VehSts_BeamSts_A8_CAN1 = 2;
+        VehSts_LonVel_A8_CAN1 = 1.313131;
+        VehSts_BeamSts_A8_CAN1 = 2;
 
         ecal_com_dp_ContructMsg(kvrChl, 0x112, TBL_DP_DBCMSGLIST_Body_dbc_cfg, u16s_dp_MsgTblSize_body_dbc_cfg);
         ecal_com_dp_ContructMsg(kvrChl, 0x300, TBL_DP_DBCMSGLIST_Body_dbc_cfg, u16s_dp_MsgTblSize_body_dbc_cfg);
